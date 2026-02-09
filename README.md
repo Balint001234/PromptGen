@@ -31,7 +31,7 @@ First time you run it, click the settings (⚙️) button and add your API key.
 
 ## Settings file
 
-Your API key gets saved in `settings.json` (encrypted but not super secure - the encryption is mostly obfuscation). By default it's in the same folder as the exe.
+Your API key gets saved in `settings.json` (without encrypted ). By default it's in the same folder as the exe.
 
 **Important:** Don't share this file or commit it to git. It's already in .gitignore but just saying.
 
@@ -47,7 +47,7 @@ This is a personal project. Use at your own risk.
 - Secure your own stuff
 - Check Google's ToS for their API
 
-The API key encryption is basic AES but since the key is in the code it's not actually secure against someone who has the source code. It just keeps it from being plaintext in the file.
+
 
 ## Tech
 
