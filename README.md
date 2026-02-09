@@ -14,7 +14,7 @@ Takes your messy prompt ideas and restructures them into proper format using Goo
 ## Setup
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/Balint001234/PromptGen.git
 cd PromptGen
 dotnet build
 dotnet run
