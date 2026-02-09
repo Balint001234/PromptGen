@@ -1,0 +1,327 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:PromptGen.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="650"
+        x:Class="PromptGen.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="AI Prompt Optimizer"
+        TransparencyLevelHint="Mica"
+        Background="#0A0A0F"
+        RequestedThemeVariant="Dark"
+        ExtendClientAreaToDecorationsHint="True"
+        WindowStartupLocation="CenterScreen"
+        Width="450"
+        Height="850"
+        FontFamily="Comic Sans MS, cursive">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Window.Resources>
+        <LinearGradientBrush x:Key="ButtonGradient" StartPoint="0%,0%" EndPoint="100%,100%">
+            <GradientStop Offset="0" Color="#4A4A4A"/>
+            <GradientStop Offset="1" Color="#2A2A2A"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="BackgroundGradient" StartPoint="0%,0%" EndPoint="100%,100%">
+            <GradientStop Offset="0" Color="#0A0A0F"/>
+            <GradientStop Offset="1" Color="#1A1A2E"/>
+        </LinearGradientBrush>
+    </Window.Resources>
+
+    <Window.Styles>
+        <Style Selector="Button">
+            <Setter Property="Background" Value="{StaticResource ButtonGradient}"/>
+            <Setter Property="Foreground" Value="#F0F0F0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="20,15"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Effect">
+                <DropShadowEffect Color="#000000" BlurRadius="20" Opacity="0.5" OffsetX="0" OffsetY="4"/>
+            </Setter>
+            <Setter Property="Transitions">
+                <Transitions>
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2"/>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.2"/>
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="Button:pointerover">
+            <Setter Property="RenderTransform" Value="scale(1.03)"/>
+            <Setter Property="Effect">
+                <DropShadowEffect Color="#666666" BlurRadius="30" Opacity="0.6" OffsetX="0" OffsetY="6"/>
+            </Setter>
+        </Style>
+        <Style Selector="Button:pressed">
+            <Setter Property="RenderTransform" Value="scale(0.98)"/>
+            <Setter Property="Opacity" Value="0.9"/>
+        </Style>
+        
+        <Style Selector="Button.Secondary">
+            <Setter Property="Background" Value="#3E3E4E"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="Opacity" Value="1.0"/>
+            <Setter Property="Effect">
+                <DropShadowEffect Color="#000000" BlurRadius="15" Opacity="0.3" OffsetX="0" OffsetY="2"/>
+            </Setter>
+        </Style>
+        <Style Selector="Button.Secondary:pointerover">
+            <Setter Property="Background" Value="#5E5E6E"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="Opacity" Value="1.0"/>
+            <Setter Property="RenderTransform" Value="scale(1.0)"/> <!-- Explicitly no scale -->
+        </Style>
+
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="#16162A"/>
+            <Setter Property="Foreground" Value="#E0E0E0"/>
+            <Setter Property="CaretBrush" Value="#888888"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="18"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#2A2A40"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Effect">
+                <DropShadowEffect Color="#000000" BlurRadius="10" Opacity="0.3" OffsetX="0" OffsetY="2"/>
+            </Setter>
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="BorderBrush" Duration="0:0:0.2"/>
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#555555"/>
+            <Setter Property="Effect">
+                <DropShadowEffect Color="#666666" BlurRadius="20" Opacity="0.4" OffsetX="0" OffsetY="0"/>
+            </Setter>
+        </Style>
+
+        <Style Selector="TextBlock.Header">
+            <Setter Property="Foreground" Value="#C0C0C0"/>
+            <Setter Property="Effect">
+                <DropShadowEffect Color="#000000" BlurRadius="15" Opacity="0.5" OffsetX="0" OffsetY="2"/>
+            </Setter>
+        </Style>
+    </Window.Styles>
+
+    <Border Background="{StaticResource BackgroundGradient}">
+        <Grid>
+            
+            <Grid RowDefinitions="Auto, Auto, *, Auto, Auto, Auto" Margin="25">
+               
+                <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,15,0,20">
+                    <TextBlock Text="✨ Prompt Optimizer" FontSize="26" FontWeight="ExtraBold" 
+                               Classes="Header"
+                               HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
+                    <Button Grid.Column="1" Content="☰" Command="{Binding OpenSettingsCommand}"
+                            Classes="Secondary"
+                            Width="40" Height="40" CornerRadius="20" Padding="0"
+                            FontSize="22"
+                            HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                            VerticalAlignment="Top"/>
+                </Grid>
+
+               
+                <Grid Grid.Row="1" RowDefinitions="Auto, Auto" Margin="0,0,0,15">
+                    <TextBlock Grid.Row="0" Text="Output Language:" 
+                               Foreground="#888888" FontSize="13" FontWeight="SemiBold"
+                               Margin="4,0,0,8"/>
+                    <ComboBox Grid.Row="1" 
+                              SelectedItem="{Binding SelectedLanguage}"
+                              ItemsSource="{Binding AvailableLanguages}"
+                              HorizontalAlignment="Stretch"
+                              CornerRadius="12"
+                              Padding="15,10"
+                              FontSize="14"
+                              Background="#16162A"
+                              Foreground="#E0E0E0"
+                              BorderBrush="#2A2A40"
+                              BorderThickness="1"/>
+                </Grid>
+
+   
+                <Grid Grid.Row="2" RowDefinitions="Auto, *">
+                    <TextBlock Grid.Row="0" Text="Enter your rough prompt:" 
+                               Foreground="#888888" FontSize="13" FontWeight="SemiBold"
+                               Margin="4,0,0,12"/>
+                    <Border Grid.Row="1" CornerRadius="16" Background="#16162A" 
+                            BorderThickness="1" BorderBrush="#2A2A40"
+                            Effect="drop-shadow(0 4 15 #00000040)">
+                        <TextBox Text="{Binding InputText}" 
+                                 Watermark="Type your idea here..."
+                                 AcceptsReturn="True" TextWrapping="Wrap"
+                                 Background="Transparent" BorderThickness="0"
+                                 VerticalAlignment="Stretch"/>
+                    </Border>
+                </Grid>
+
+               
+                <Border Grid.Row="3" Margin="0,15,0,12" CornerRadius="12"
+                        Background="#1E1E2E" Padding="12,8"
+                        IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                        Effect="drop-shadow(0 2 10 #00000030)">
+                    <TextBlock Text="{Binding StatusMessage}" 
+                               Foreground="#AAAAAA" HorizontalAlignment="Center" 
+                               FontSize="13" FontWeight="SemiBold"/>
+                </Border>
+
+             
+                <Button Grid.Row="4" Content="🚀 GENERATE PROMPT" 
+                        Command="{Binding GeneratePromptCommand}"
+                        IsEnabled="{Binding !IsBusy}" 
+                        HorizontalAlignment="Stretch" Height="56"
+                        HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                
+                
+                <Button Grid.Row="5" Content="👁 VIEW RESULT" 
+                        Classes="Secondary"
+                        Command="{Binding ViewResultCommand}"
+                        IsVisible="{Binding HasGeneratedResult}"
+                        HorizontalAlignment="Stretch" Margin="0,12,0,0" Height="56"
+                        HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            </Grid>
+
+           
+            <Grid IsVisible="{Binding IsBusy}" Background="#DD000000">
+                <Border Background="#1E1E2E" CornerRadius="24" Padding="40,30"
+                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Effect="drop-shadow(0 10 40 #00000080)">
+                    <StackPanel Spacing="20">
+                        <ProgressBar IsIndeterminate="True" Width="220" Height="5" 
+                                     Foreground="#888888"
+                                     Background="#2A2A40" CornerRadius="3"/>
+                        <TextBlock Text="✨ Crafting magic..." 
+                                   HorizontalAlignment="Center" 
+                                   Foreground="#AAAAAA" FontSize="18" FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+       
+            <Grid IsVisible="{Binding IsResultVisible}" Background="{StaticResource BackgroundGradient}">
+                <Grid RowDefinitions="Auto, *, Auto" Margin="25">
+                    
+                  
+                    <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,15,0,25">
+                        <TextBlock Text="✨ Optimized Result" FontSize="24" FontWeight="ExtraBold" 
+                                   Classes="Header"
+                                   VerticalAlignment="Center"/>
+                        <Button Grid.Column="1" Content="✕" Command="{Binding CloseResultCommand}" 
+                                Classes="Secondary"
+                                Width="44" Height="44" CornerRadius="22" Padding="0"
+                                FontSize="18" FontWeight="Bold"
+                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                    </Grid>
+
+                   
+                    <Border Grid.Row="1" CornerRadius="16" Background="#16162A"
+                            BorderThickness="1" BorderBrush="#2A2A40"
+                            Effect="drop-shadow(0 4 15 #00000040)">
+                        <TextBox Text="{Binding OutputText}" IsReadOnly="True" 
+                                 TextWrapping="Wrap" AcceptsReturn="True"
+                                 Background="Transparent" BorderThickness="0"
+                                 VerticalAlignment="Stretch"/>
+                    </Border>
+
+                  
+                    <Grid Grid.Row="2" ColumnDefinitions="*, 12, *" Margin="0,25,0,0">
+                        <Button Grid.Column="0" Content="📋 COPY" 
+                                Command="{Binding CopyToClipboardCommand}" 
+                                HorizontalAlignment="Stretch" Height="56"
+                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                        
+                        <Button Grid.Column="2" Content="← BACK" 
+                                Classes="Secondary"
+                                Command="{Binding CloseResultCommand}"
+                                HorizontalAlignment="Stretch" Height="56"
+                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                    </Grid>
+
+                </Grid>
+            </Grid>
+
+           
+            <Grid IsVisible="{Binding IsSettingsVisible}" Background="{StaticResource BackgroundGradient}">
+                <Grid RowDefinitions="Auto, *, Auto" Margin="25">
+                    
+                   
+                    <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,15,0,25">
+                        <TextBlock Text="Settings" FontSize="24" FontWeight="ExtraBold" 
+                                   Classes="Header"
+                                   VerticalAlignment="Center"/>
+                        <Button Grid.Column="1" Content="✕" Command="{Binding CloseSettingsCommand}" 
+                                Classes="Secondary"
+                                Width="44" Height="44" CornerRadius="22" Padding="0"
+                                FontSize="18" FontWeight="Bold"
+                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                    </Grid>
+
+                 
+                    <!-- Result Form -->
+                    <ScrollViewer Grid.Row="1" Padding="0,0,0,20">
+                        <StackPanel Spacing="30">
+                            
+                            <!-- API Key -->
+                            <StackPanel Spacing="10">
+                                <TextBlock Text="Google Gemini API Key:" 
+                                           Foreground="#888888" FontSize="13" FontWeight="SemiBold"
+                                           Margin="4,0,0,0"/>
+                                <TextBox Text="{Binding SettingsApiKey}"
+                                         Watermark="Enter your API key..."
+                                         PasswordChar="•"
+                                         Height="50"/>
+                            </StackPanel>
+
+                            <!-- Settings Directory Selection Custom Button -->
+                            <StackPanel Spacing="10">
+                                <TextBlock Text="Settings Storage Location:" 
+                                           Foreground="#888888" FontSize="13" FontWeight="SemiBold"
+                                           Margin="4,0,0,0"/>
+                                <Button Command="{Binding UpdateSettingsDirectoryCommand}"
+                                        Classes="Secondary"
+                                        HorizontalAlignment="Stretch" Padding="15" MinHeight="60">
+                                    <Grid ColumnDefinitions="Auto, *">
+                                        <TextBlock Grid.Column="0" Text="📁" FontSize="20" Margin="0,0,12,0"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding SettingsDirectory}" 
+                                                   TextWrapping="Wrap" FontSize="12" 
+                                                   VerticalAlignment="Center" Foreground="#AAAAAA"/>
+                                    </Grid>
+                                </Button>
+                                <TextBlock Text="Click the folder above to change location" 
+                                           FontSize="10" Foreground="#666666" HorizontalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- Information Box -->
+                            <Border Background="#1E1E2E" CornerRadius="16" Padding="20" Margin="0,10,0,0">
+                                <StackPanel Spacing="8">
+                                    <TextBlock Text="💡 Automatic Saving" FontWeight="Bold" Foreground="#BBBBBB" FontSize="14"/>
+                                    <TextBlock Text="Your API key and preferences are saved instantly when modified." 
+                                               TextWrapping="Wrap" Foreground="#888888" FontSize="12"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Rectangle Height="40"/> <!-- Extra bottom space -->
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <!-- Save Actions -->
+                    <Grid Grid.Row="2" Margin="0,20,0,0">
+                        <Button Content="💾 SAVE SETTINGS" 
+                                Command="{Binding SaveSettingsCommand}" 
+                                HorizontalAlignment="Stretch" Height="56"
+                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                    </Grid>
+
+                </Grid>
+            </Grid>
+
+        </Grid>
+    </Border>
+</Window>
